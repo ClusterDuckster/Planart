@@ -1,0 +1,15 @@
+/* CSS declarations go here */
+
+body {
+	padding: 0px;
+	margin: 0px;
+	display: inline;
+	overflow: hidden;
+}
+
+.UserInfo {
+	color: white;
+	font: bold 24px/45px Helvetica, Sans-Serif;
+	position: absolute;
+	background-color: aquamarine;
+}
