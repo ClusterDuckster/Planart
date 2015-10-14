@@ -5,14 +5,16 @@ animate();
 
 function init() {
 	scene = new THREE.Scene();
-	camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-
-	controls = new THREE.TrackballControls( camera );
-	controls.addEventListener( 'change', render );
+	camera = new THREE.PerspectiveCamera( 30, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
+	
+	//TrackballControlls-> PAN:0 = Pan auf Linksklick
+	controls = new THREE.TrackballControls( camera, renderer.domElement );
+	controls.noRotate = true;
+	controls.addEventListener( 'change', render );
 
 	// Planet 1
 	var geometry1 = new THREE.SphereGeometry( 2, 16, 16 );
@@ -29,7 +31,7 @@ function init() {
 	scene.add( sphere1 );
 	scene.add( sphere2 );
 
-	camera.position.z = 5;
+	camera.position.z = 30;
 
 	render();
 }
