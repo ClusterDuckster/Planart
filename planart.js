@@ -27,8 +27,11 @@ function init() {
 	var material2 = new THREE.MeshBasicMaterial( {color: 0x00ff00, wireframe: true} );
 	var sphere2 = new THREE.Mesh( geometry2, material2 );
 	sphere2.position.x = 3;
+	
+	var planet1 = createPlanet();
+	planet1.position.x = -3
 
-	scene.add( sphere1 );
+	scene.add( planet1 );
 	scene.add( sphere2 );
 
 	camera.position.z = 30;
@@ -43,4 +46,11 @@ function animate() {
 
 function render() {
 	renderer.render(scene, camera);
+}
+
+function createPlanet(){
+	var newPlanet = new Planet();
+	console.log(newPlanet.texture);
+	
+	return newPlanet.planetMesh;
 }
