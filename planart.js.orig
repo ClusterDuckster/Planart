@@ -1,0 +1,168 @@
+var scene, camera, renderer;
+
+<<<<<<< HEAD
+if (Meteor.isClient) {
+  // counter starts at 0
+  Session.setDefault('counter', 0);
+	
+	//3D Environment
+	Template.space.rendered = function() {
+		
+			var container, stats;
+			
+			var scene, canera, renderer, element, geometry, material, cube, star, light;
+		
+			//initialise the scene
+			init();
+			//animate and render it
+			render();
+		
+			function init(){
+				
+				//Field of View
+				var FOV = 75;
+				//Aspect ratio
+				var ASPECT = window.innerWidth / window.innerHeight;
+				//Border of frustum close to camera
+				var NEAR = 0.1;
+				//Border of frustum far away from the camera
+				var FAR = 1000;
+				
+				scene = new THREE.Scene();
+				//Camera Position
+				camera = new THREE.PerspectiveCamera( FOV, ASPECT, NEAR, FAR );
+				camera.position.z = 5;
+				
+				controls = new THREE.TrackballControls( camera );
+                
+                controls.rotateSpeed = 2.0;
+                
+				controls.noZoom = false;
+                controls.noPan = false;
+				controls.addEventListener( 'change', render );
+				
+				var light = new THREE.PointLight( 0xff0000, 1, 100 );
+				light.position.set( 50, 50, 50 );
+				scene.add( light );
+			
+				//Create Objects and add them to the Scene
+				geometry = new THREE.SphereGeometry( 2, 10, 10 );
+				material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
+				cube = new THREE.Mesh( geometry, material );
+				//scene.add(cube);
+				
+				starA = addStar(0xff00ff, 1, 3, 3);
+				starA.position.x = 3;
+				starB = addStar(0x2255ff, 1, 3, 3);
+				starB.position.x = -3;
+				starC = addStar(0x77773f, 1, 3, 3);
+				starC.position.x = 3;
+				starC.position.z = -3;
+				starD = addStar(0xff0841, 1, 3, 3);
+				starD.position.x = -3;
+				starD.position.z = -3;
+				scene.add(starA);
+				scene.add(starB);
+				scene.add(starC);
+				scene.add(starD);
+				
+				//Sterne erstellen
+				for(var i = 0; i<=1; i++){
+					
+				}
+				
+			
+				
+				
+				//Renderer and size of output
+				renderer = new THREE.WebGLRenderer();
+				renderer.setClearColor(0x000000);
+				renderer.shadowMapEnabled = true;
+				renderer.setSize( window.innerWidth, window.innerHeight);
+				//Style to get rid of blank space and scrollbars (not working)
+				//element = renderer.domElement;
+				//element.style.margin = "0px";
+				//element.style.overflow = "hidden";
+				//document.body.appendChild( renderer.domElement );
+				
+				container = document.body;
+        container.appendChild( renderer.domElement );
+ 
+				/*
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.top = '0px';
+        stats.domElement.style.zIndex = 100;
+        container.appendChild( stats.domElement );
+				*/
+			}
+			
+			function render() {
+				requestAnimationFrame( render );
+				
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
+				
+				renderer.render( scene, camera );
+				update();
+			}
+			
+			function addStar (color, radius, widthsegments, heightsegments) {
+	
+				var starGeo, material, shape;
+=======
+init();
+animate();
+
+function init() {
+	scene = new THREE.Scene();
+	camera = new THREE.PerspectiveCamera( 30, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+>>>>>>> ee00cceab253f9d69c7699731e75a335023b2345
+	
+	//TrackballControlls-> PAN:0 = Pan auf Linksklick
+	controls = new THREE.TrackballControls( camera, renderer.domElement );
+	controls.noRotate = true;
+	controls.addEventListener( 'change', render );
+
+	// Planet 1
+	var geometry1 = new THREE.SphereGeometry( 2, 16, 16 );
+	var material1 = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe: true} );
+	var sphere1 = new THREE.Mesh( geometry1, material1 );
+	sphere1.position.x = -3;
+
+	// Planet 2
+	var geometry2 = new THREE.SphereGeometry( 2, 16, 16 );
+	var material2 = new THREE.MeshBasicMaterial( {color: 0x00ff00, wireframe: true} );
+	var sphere2 = new THREE.Mesh( geometry2, material2 );
+	sphere2.position.x = 3;
+	
+	var planet1 = createPlanet();
+	planet1.position.x = -3
+
+	scene.add( planet1 );
+	scene.add( sphere2 );
+
+	camera.position.z = 30;
+
+	render();
+}
+
+function animate() {
+	requestAnimationFrame( animate );
+	controls.update();
+}
+
+function render() {
+	renderer.render(scene, camera);
+}
+
+function createPlanet(){
+	var newPlanet = new Planet();
+	console.log(newPlanet.texture);
+	
+	return newPlanet.planetMesh;
+}
