@@ -21,7 +21,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
     this.rotateSpeed = 1.0;
     this.zoomSpeed = 1.2;
-    this.panSpeed = 0.3;
+    this.panSpeed = 0.1;
 
     this.noRotate = false;
     this.noZoom = false;
@@ -395,7 +395,8 @@ THREE.TrackballControls = function ( object, domElement ) {
         if ( _this.enabled === false ) return;
 
         event.preventDefault();
-        event.stopPropagation();
+        //Propagation needed for clickable planets
+        //event.stopPropagation();
 
         if ( _state === STATE.NONE ) {
 
