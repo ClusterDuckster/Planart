@@ -1,27 +1,23 @@
-function Planet(){
+function Planet( textureNr ){
     
     var myPlanet = this;
+
+	this.name = "Erde";
+
+	this.textureNr = textureNr;
+
+	//Ressourcen
+	this.metal = 0;
+	this.fiber = 0;
+	this.nucleus = 0;
+	this.infenites = 0;
+	this.drones = 1;
 
 	//Erstelle Planeten
 	this.geometry = new THREE.SphereGeometry( 2, 16, 16 );
     //AUF KEINEN FALL THREE.MeshBasicMaterial() BENUTZEN!!! -> da kein emissive
-    this.material = new THREE.MeshLambertMaterial( {color: 0xffffff} );
+    this.material = new THREE.MeshLambertMaterial( {} );
     this.mesh = new THREE.Mesh( this.geometry, this.material );
 
-	//Lade Textur
-	var loader = new THREE.TextureLoader();
-	loader.load( 'textures/land_ocean_ice_cloud_2048.jpg', function ( texture ) {
-		
-        myPlanet.mesh.material.map = texture;
-		myPlanet.mesh.material.needsUpdate = true;
-        //myPlanet.mesh.material.color = none;
-
-	},
-	function (xhr) {
-		console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-	},
-	function ( xhr ) {
-		console.log( 'An error happened' );
-	});
 	
 }

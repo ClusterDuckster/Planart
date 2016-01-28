@@ -8,6 +8,27 @@ var focusedObj, wHalf, hHalf, vector;
 //Variables for Events
 var lastMousedown, lastMouseup;
 var planetWindow, pWinWidth;
+//Textures
+//Texture Source: http://planetpixelemporium.com/planets.html
+var texPaths = [
+		"textures/earthmap1k.jpg",
+		"textures/jupitermap.jpg",
+		"textures/mars_1k_color.jpg",
+		"textures/mercurymap.jpg",
+		"textures/plutomap1k.jpg",
+		"textures/saturnmap.jpg",
+		"textures/uranusmap.jpg",
+		"textures/venusmap.jpg",
+	];
+var textures = [];
+//Planet Construction
+var AnzahlPlaneten = 5;
+var planets = [];
+var minDistance = 7;
+var noSpaceAvailableCount = 0;
+var maxIterations = 10;
+
+
 
 init();
 animate();
@@ -44,9 +65,8 @@ function init() {
 
 
 
-	//Create planet object
-	var planet1 = createPlanet();
-	planet1.mesh.position.x = -5;
+	//Create planet objects
+	initPlanets();
 
 	camera.position.z = 30;
 
@@ -92,17 +112,17 @@ function onCanvasMouseclick( event ) {
 
 			planetWindow = document.createElement("div");
 			planetWindow.id = "pWindow";
+			planetWindow.innerHTML = "<h1>Hello</h1>";
+
 			planetWindow.style.top = event.clientY + "px";
 			planetWindow.style.left = event.clientX + "px";
 			planetWindow.style.width = "100px";
 			planetWindow.style.height = "100px";
-			planetWindow.style.background = "red";
-			planetWindow.style.color = "white";
-			planetWindow.innerHTML = "Hello";
+
 
 			document.body.appendChild(planetWindow);
 		}
-    	console.log(event);
+		//console.log(event);
 	}
 }
 
@@ -135,12 +155,16 @@ function render() {
 
 		if(vector.x + pWinWidth > wHalf*2-40){
 			planetWindow.style.left = wHalf*2-40-pWinWidth + "px";
+		} else if (vector.x < 250){
+			planetWindow.style.left = 250;
 		} else {
 			planetWindow.style.left = vector.x + "px";
 		}
 
 		if(vector.y + pWinWidth > hHalf*2-40){
 			planetWindow.style.top = hHalf*2-40-pWinWidth + "px";
+		} else if (vector.y < 20){
+			planetWindow.style.top = 20;
 		} else {
 			planetWindow.style.top = vector.y + "px";
 		}
@@ -178,13 +202,95 @@ function render() {
 	renderer.render(scene, camera);
 }
 
-function createPlanet(){
+function createPlanet( textureNr ){
 
-	var newPlanet = new Planet();
+	var newPlanet = new Planet( textureNr );
 	
     scene.add(newPlanet.mesh);
 
 	return newPlanet;
+}
+
+function createRandomPlanet (){
+
+	var invalidPosition = false;
+	var xPos = Math.floor(Math.random()*20-10);
+	var yPos = Math.floor(Math.random()*20-10);
+	var posVec = new THREE.Vector3(xPos, yPos, 0);
+
+	//Check if position is valid
+	for(var i = 0; i<planets.length; i++){
+
+		if(posVec.distanceTo(planets[i].mesh.position) < minDistance){
+			invalidPosition = true;
+		}
+
+	}
+
+	if(invalidPosition==false){
+
+		noSpaceAvailableCount = 0;
+
+		var newPlanet = new Planet( Math.floor(Math.random()*texPaths.length) );
+
+		newPlanet.mesh.position.x = xPos;
+		newPlanet.mesh.position.y = yPos;
+
+    	scene.add(newPlanet.mesh);
+
+		return newPlanet;
+
+	} else if(noSpaceAvailableCount <= maxIterations){
+
+		noSpaceAvailableCount++;
+
+		return createRandomPlanet();
+
+	} else {
+		return "No Space available";
+	}
+}
+
+function initPlanets(){
+
+	for(var i = 0; i<AnzahlPlaneten; i++){
+
+		var newPlanet = createRandomPlanet();
+
+		//basically try/catch
+		if( typeof newPlanet == "object"){
+			planets.push(newPlanet);
+		} else {
+			console.log(newPlanet);
+		}
+
+	}
+
+	/*
+	for(var i = 0; i<AnzahlPlaneten; i++){
+		planets[i] = createPlanet(Math.floor(Math.random()*texPaths.length));
+		planets[i].mesh.position.x = Math.floor(Math.random()*20-10);
+		planets[i].mesh.position.y = Math.floor(Math.random()*20-10);
+	}
+	*/
+
+	//Texturen laden
+	var loader = new THREE.TextureLoader();
+	for(var i = 0; i < texPaths.length; i++){
+		loader.load( texPaths[i], function ( texture ) {
+
+			textures.push(texture);
+
+			if(textures.length == texPaths.length){
+				for(var j = 0; j < planets.length; j++){
+					planets[j].material.map = textures[planets[j].textureNr];
+					planets[j].material.needsUpdate = true;
+
+				}
+			}
+
+		});
+	}
 }
 
 function onWindowResize() {

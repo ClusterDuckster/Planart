@@ -1,22 +1,23 @@
 @font-face {
     font-family: Miso;
-    src: url(miso.otf);
+    src: url(fonts/miso.otf);
 }
 
 @font-face {
     font-family: Miso;
-    src: url(miso-light.otf);
+    src: url(fonts/miso-light.otf);
     font-weight: lighter;
 }
 
 @font-face {
     font-family: Miso;
-    src: url(miso-bold.otf);
+    src: url(fonts/miso-bold.otf);
     font-weight: bold;
 }
 
 body {
-	font: Miso;
+	font-family: Miso;
+	font-weight: bold;
 	margin: 0;
 	overflow: auto;
 }
@@ -38,7 +39,11 @@ div {
 	background-color: rgba(50,150,150,0.9);
 	border-radius: 20px;
 
-	text-align: center;
+	text-align: left;
+}
+
+#pWindow{
+
 }
 
 canvas {
