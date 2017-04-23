@@ -63,7 +63,9 @@
 			</div>
 			<div id="chatBox">
 				<div id="messageBox">
-					<ul id="chat_messages" class="box"></ul>
+					<ul ng-controller="chatMsgCtrl" id="chat_messages" class="box">
+						<li ng-repeat="msg in chat_messages">{{msg.user}}: {{msg.body}}</li>
+					</ul>
 					<form id="chatForm" action="">
 						<input type="text" id="message" autocomplete="off" placeholder="Type your message here" autofocus>
 						<button class="button">Send</button>
