@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Planart</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+		<link rel="stylesheet" href="planart.css">
+	</head>
+	<body>
+        <div id= "resBar" class="window">
+            <div id="resEle">Drones</div>
+            <div id="resEle">Metal</div>
+            <div id="resEle">Fiber</div>
+            <div id="resEle">Nucleus</div>
+            <div id="resEle">Infinites</div>
+        </div>
+        
+		<div id="leftBar" class="window">
+			<h1>PLANART</h1>
+            
+            <table style="width:100%;">
+                <tr>
+                    <td>
+                        <div id="playerStats">
+                            <span>Player: Ojot <br></span>
+                            <span>Points: 0 <br></span>
+                            <span>Clan: DCF <br></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div id="planetSelect">
+            
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            
+			
+            <br>
+            
+            
+            <div id="buildingsBtn" class="infoBtn">Gebäude<br></div>
+            <div id="researchBtn" class="infoBtn">Forschung<br></div>
+            <div id="productionBtn" class="infoBtn">Produktion<br></div>
+            <div id="fleetBtn" class="infoBtn">Flotte<br></div>
+			
+			<br>
+            
+		
+		</div>
+		
+		<script src="jquery-2.1.4.min.js"></script>
+		<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r72/three.min.js"></script>-->
+        <script src="TweenLite.min.js"></script>
+        <script src="three.min.js"></script>
+		<script src="TrackballControls.js"></script>
+        <script src="Planet.js"></script>
+		<script src="planart.js"></script>
+	</body>
+</html>
+

@@ -1,0 +1,95 @@
+<!-- views/lobby.ejs -->
+<!doctype html>
+<html>
+
+<head>
+	<title>Lobby - PLANART</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/menu.css">
+	<script type="text/javascript" src="socket.io.js"></script>
+	<script type="text/javascript" src="libs/jquery-2.1.4.min.js"></script>
+	<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> -->
+	<script type="text/javascript" src="libs/angular.min.js"></script>
+	<script type="text/javascript" src="js/chat.js"></script>
+	<% if (userID) { %>
+		<script>
+			var userID, username, defaultRoom, chatColor, gameID;
+			//The highlighting looks bad, but it works
+			//Put the userData from req, which is available at rendering, in a variable to use with client side javascript, i.e. chat
+			userID = JSON.parse('<%- userID %>');
+			username = JSON.parse('<%- username %>');
+			defaultRoom = JSON.parse('<%- userDefaultRoom %>');
+			chatColor = JSON.parse('<%- userChatColor %>');
+			gameID = JSON.parse('<%- gameID %>');
+		</script>
+	<% } %>
+</head>
+
+<body>
+	<div id="flexBox">
+
+		<div id="lobby_header" class="header">
+			<h1>Game Lobby</h1>
+			<div id="header_buttons">
+				<form action="/logout">
+					<button class="button">Logout</button>
+				</form>
+				<form action="/profile">
+					<button class="button">Profile</button>
+				</form>
+				<form action="/game_lounge">
+					<button class="button">Leave</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="flexMain box">
+			<div id="main_header">
+				<h2 style="margin-bottom: 0px;">Players</h2>
+			</div>
+			<div id="lobbyContent" class="box">
+				<div id="playerBox" >
+					<!-- list of players in game -->
+					<ul id="playerList">
+						<li>Player 1</li>
+						<li>Player 2</li>
+						<li>Player 3</li>
+						<li>Player 4</li>
+						<li>Player 5</li>
+						<li>Player 6</li>
+						<li>Player 7</li>
+						<li>Player 8</li>
+					</ul>
+				</div>
+				<div id="lobbyChat">
+					<ul id="chat_messages" class="box"></ul>
+					<form id="chatForm" action="">
+						<input type="text" id="message" autocomplete="off" placeholder="Type your message here" autofocus>
+						<button class="button">Send</button>
+					</form>
+				</div>
+			</div>
+
+		</div>
+
+		<div id="gameInfoBox" class="flexSide box">
+			<div id="side_header">
+				<h2 style="margin-bottom: 0px;">Game info</h2>
+			</div>
+			<div id="usersBox" class="box">
+
+			</div>
+			<div>
+				<button class="button">Start game</button>
+			</div>
+
+
+		</div>
+
+	</div>
+	</div>
+
+	</div>
+</body>
+
+</html>

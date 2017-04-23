@@ -1,0 +1,9 @@
+# Windows files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Mac files
+.DS_Store
+node_modules
+test.html

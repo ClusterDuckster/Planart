@@ -1,0 +1,74 @@
+<!-- views/lobby.ejs -->
+<!doctype html>
+<html>
+
+<head>
+	<title>Lobby - PLANART</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/menu.css">
+	<script type="text/javascript" src="socket.io.js"></script>
+	<script type="text/javascript" src="libs/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="js/chat.js"></script>
+	<% if (userID) { %>
+		<script>
+			var userID, username, defaultRoom, chatColor, gameID;
+			//The highlighting looks bad, but it works
+			//Put the userData from req, which is available at rendering, in a variable to use with client side javascript, i.e. chat
+			userID = JSON.parse('<%- userID %>');
+			username = JSON.parse('<%- username %>');
+		</script>
+	<% } %>
+</head>
+
+<body>
+	<div id="flexbox">
+
+		<div id="lobby_header" class="header">
+			<h1>Game Lobby</h1>
+			<div id="header_buttons">
+				<form action="/logout">
+					<button class="button">Logout</button>
+				</form>
+				<form action="/profile">
+					<button class="button">Profile</button>
+				</form>
+				<form action="/game_lounge">
+					<button class="button">Leave</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="flexMain box">
+			<div id="main_header">
+				<h2>Players</h2>
+			</div>
+			<div class="box">
+				<div id="playerBox" >
+					<!-- list of players in game -->
+					<ul id="playerList"></ul>
+				</div>
+				<div id="messageBox">
+					<ul id="chat_messages" class="box"></ul>
+					<form id="chatForm" action="">
+						<input type="text" id="message" autocomplete="off" value="example">
+						<button class="button">Send</button>
+					</form>
+				</div>
+			</div>
+
+		</div>
+
+		<div id="gameInfoBox" class="flexSide box">
+			<div id="usersBox" class="box">
+				<h3>Game info</h3>
+			</div>
+
+		</div>
+
+	</div>
+	</div>
+
+	</div>
+</body>
+
+</html>

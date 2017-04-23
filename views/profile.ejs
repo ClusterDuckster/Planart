@@ -1,0 +1,62 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>Node Authentication</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body        { padding-top:80px; word-wrap:break-word; }
+    </style>
+</head>
+<body>
+<script type="text/javascript" src="socket.io.js"></script>
+<div class="container">
+
+	<div>
+		<div>
+			Inactivity
+		</div>
+	</div>
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-globe"></span> Profile Page</h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		<a href="/game_lounge" class="btn btn-default btn-sm">Game Lounge</a>
+    </div>
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <div class="col-sm-6">
+            <div class="well">
+                <h3><span class="fa fa-user"></span> Local Profile</h3>
+
+                    <p>
+                        <strong>id</strong>: <%= user._id %><br>
+						<strong>username</strong>: <%= user.local.username %><br>
+                        <strong>email</strong>: <%= user.local.email %><br>
+                        <strong>password</strong>: <%= user.local.password %>
+                    </p>
+
+            </div>
+        </div>
+		<!-- STATS INFORMATION -->
+        <div class="col-sm-6">
+            <div class="well">
+                <h3><span class="fa fa-space-shuttle"></span> Stats</h3>
+
+                    <p>
+                        <strong>Wins</strong>: Coming<br><br>
+                        <strong>Loses</strong>: Soon<br><br>
+                        <strong>Rank</strong>: Wubalubadubdub
+                    </p>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
