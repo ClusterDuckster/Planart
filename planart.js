@@ -8,6 +8,8 @@ var focusedObj, wHalf, hHalf, vector;
 //Variables for Events
 var lastMousedown, lastMouseup;
 var planetWindow, pWinWidth;
+var activeMenu = null;
+var menues, buildMenu, researchMenu, productionMenu, fleetMenu;
 //Textures
 //Texture Source: http://planetpixelemporium.com/planets.html
 var texPaths = [
@@ -27,7 +29,11 @@ var planets = [];
 var minDistance = 7;
 var noSpaceAvailableCount = 0;
 var maxIterations = 10;
-
+//Buttons
+var buildingsButton = document.getElementById("buildingsBtn");
+var researchButton = document.getElementById("researchBtn");
+var productionButton = document.getElementById("productionBtn");
+var fleetButton = document.getElementById("fleetBtn");
 
 
 init();
@@ -69,8 +75,36 @@ function init() {
 	initPlanets();
 
 	camera.position.z = 30;
+	
+	//Create Window Menues
+	buildMenu = document.createElement("div");
+    buildMenu.id = "buildMenu";
+    buildMenu.className = "window menu";
+	buildMenu.innerHTML = "BUILDINGS";
 
+	researchMenu = document.createElement("div");
+	researchMenu.id = "researchMenu";
+    researchMenu.className = "window menu";
+	researchMenu.innerHTML = "RESEARCH";
+	
+	productionMenu = document.createElement("div");
+	productionMenu.id = "productionMenu";
+    productionMenu.className = "window menu";
+	productionMenu.innerHTML = "PRODUCTION";
+	
+	fleetMenu = document.createElement("div");
+	fleetMenu.id = "fleetMenu";
+    fleetMenu.className = "window menu";
+	fleetMenu.innerHTML = "FLEET";
+	
+	menues = [ buildMenu, researchMenu, productionMenu, fleetMenu ];
+	
     //Add Listeners
+    buildingsButton.addEventListener( 'click', onBuildingsButton, false);
+	researchButton.addEventListener( 'click', onResearchButton, false);
+	productionButton.addEventListener( 'click', onProductionButton, false);
+	fleetButton.addEventListener( 'click', onFleetButton, false);
+    
     renderer.domElement.addEventListener( 'mousedown', onCanvasMousedown, false);
 	renderer.domElement.addEventListener( 'mouseup', onCanvasMouseup, false);
 	renderer.domElement.addEventListener( 'click', onCanvasMouseclick, false);
@@ -80,7 +114,48 @@ function init() {
     window.addEventListener( 'resize', onWindowResize, false );
 }
 
-//
+//Fenser anzeigen zum Bauen von Gebäuden
+function onBuildingsButton( event ) {
+	openWindowMenu(0);
+}
+
+//Fenster anzeigen zum durchführen von Forschungen
+function onResearchButton( event ) {
+	openWindowMenu(1);
+}
+
+//Fenster anzeigen zur Produktion von Einheiten
+function onProductionButton( event ) {
+	openWindowMenu(2);
+}
+
+//Fenster anzeigen zur Produktion von Einheiten
+function onFleetButton( event ) {
+	openWindowMenu(3);
+}
+
+function openWindowMenu( i ){
+	//Wenn das Fenster schon offen ist schließe es
+	if(activeMenu === menues[i]){
+		document.body.removeChild(activeMenu);
+		
+		activeMenu = null;
+	} else {
+		//Wenn ein anderes Fenster da ist schließe es
+		if(activeMenu !== null){
+			document.body.removeChild(activeMenu);
+		}
+		document.body.appendChild(menues[i]);
+		activeMenu = menues[i];
+	}
+	
+} 
+
+function onPWinClose( event ){
+    document.body.removeChild(planetWindow);
+    planetWindow = null;
+}
+
 function onDocumentMouseMove( event ) {
 
     event.preventDefault();
@@ -101,24 +176,42 @@ function onCanvasMouseup( event ) {
 }
 
 function onCanvasMouseclick( event ) {
-
-	if(lastMouseup.timeStamp-lastMousedown.timeStamp<200){
+    //Damit kein Klick beim PAN entsteht
+	if(lastMouseup.timeStamp-lastMousedown.timeStamp<500){
+        if(planetWindow!=null && INTERSECTED == null){
+            document.body.removeChild(planetWindow);
+            planetWindow = null;
+        }
 		if(INTERSECTED instanceof THREE.Mesh){
 			if(planetWindow!=null){
 				document.body.removeChild(planetWindow);
 			}
 
-			focusedObj = INTERSECTED;
+            //Such dir das angeklickte Objekt aus der DB
+            for(var i = 0; i<planets.length; i++){
+                if(INTERSECTED == planets[i].mesh){
+                    focusedObj = planets[i];
+                }
+            }
+            
+            console.log(focusedObj);
 
 			planetWindow = document.createElement("div");
 			planetWindow.id = "pWindow";
-			planetWindow.innerHTML = "<h1>Hello</h1>";
+            planetWindow.className = "window";
+            
+			planetWindow.innerHTML = "<h2>Planet: "+focusedObj.name+"</h2>"
+                                    + "<div id='pWinCloseBtn' class='closeBtn'></div>"
+                                    + "<div class='pButton'>ATTACK</div>"
+                                    + "<div class='pButton'>SEND</div>"
+                                    + "<div class='pButton'>FOCUS</div>";
 
 			planetWindow.style.top = event.clientY + "px";
 			planetWindow.style.left = event.clientX + "px";
-			planetWindow.style.width = "100px";
-			planetWindow.style.height = "100px";
+			planetWindow.style.minWidth = "100px";
+			planetWindow.style.minHeight = "100px";
 
+            planetWindow.addEventListener("click", onPWinClose, false);
 
 			document.body.appendChild(planetWindow);
 		}
@@ -145,14 +238,16 @@ function render() {
 		wHalf = 0.5*renderer.context.canvas.width;
 		hHalf = 0.5*renderer.context.canvas.height;
 
-		vector.setFromMatrixPosition(focusedObj.matrixWorld);
+		vector.setFromMatrixPosition(focusedObj.mesh.matrixWorld);
     	vector.project(camera);
 
 		vector.x = ( vector.x * wHalf ) + wHalf;
     	vector.y = - ( vector.y * hHalf ) + hHalf;
 
 		pWinWidth = $("#pWindow").width();
+		pWinHeight = $("#pWindow").height();
 
+		//don't let it get over the borders
 		if(vector.x + pWinWidth > wHalf*2-40){
 			planetWindow.style.left = wHalf*2-40-pWinWidth + "px";
 		} else if (vector.x < 250){
@@ -162,7 +257,7 @@ function render() {
 		}
 
 		if(vector.y + pWinWidth > hHalf*2-40){
-			planetWindow.style.top = hHalf*2-40-pWinWidth + "px";
+			planetWindow.style.top = hHalf*2-40-pWinHeight + "px";
 		} else if (vector.y < 20){
 			planetWindow.style.top = 20;
 		} else {
@@ -278,9 +373,10 @@ function initPlanets(){
 	var loader = new THREE.TextureLoader();
 	for(var i = 0; i < texPaths.length; i++){
 		loader.load( texPaths[i], function ( texture ) {
-
+			//Texturen im Array speichern
 			textures.push(texture);
-
+			
+			//Texturen müssen warum auch immer im loader zu den Objekten hinzugefügt werden
 			if(textures.length == texPaths.length){
 				for(var j = 0; j < planets.length; j++){
 					planets[j].material.map = textures[planets[j].textureNr];

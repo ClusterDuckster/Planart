@@ -1,0 +1,107 @@
+<!-- views/lounge.ejs -->
+<!doctype html>
+<html>
+
+<head>
+	<title>Lounge - PLANART</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	-->
+	<link rel="stylesheet" href="css/menu.css">
+	<script type="text/javascript" src="socket.io.js"></script>
+	<script type="text/javascript" src="libs/jquery-2.1.4.min.js"></script>
+	<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> -->
+	<script type="text/javascript" src="libs/angular.min.js"></script>
+	<script type="text/javascript" src="js/chat.js"></script>
+	<% if (userID) { %>
+		<script>
+			var userID, username, defaultRoom, chatColor, gameID;
+			//The highlighting may look bad, but it works
+			//Put the userData from req, which is available at rendering, in a variable to use with client side javascript, i.e. chat
+			userID = JSON.parse('<%- userID %>');
+			username = JSON.parse('<%- username %>');
+			<% if( userDefaultRoom ) { %>
+			defaultRoom = JSON.parse('<%- userDefaultRoom %>');
+			<% } %>
+			<% if( userChatColor ) { %>
+			chatColor = JSON.parse('<%- userChatColor %>');
+			<% } %>
+		</script>
+	<% } %>
+</head>
+
+<body>
+	<div id="flexBox">
+
+		<div id="lounge_header" class="header">
+			<h1>Game Lounge</h1>
+			<div id="header_buttons">
+				<form action="/logout">
+					<button class="button">Logout</button>
+				</form>
+				<form action="/profile">
+					<button class="button"‚>Profile</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="leftBlankSpace sideSpace"></div>
+		<div class="rightBlankSpace sideSpace"></div>
+
+		<!--
+		<div class="navBar box">
+
+		</div>
+		-->
+
+		<!-- CHAT AND ROOM CONTROLS -->
+		<div class="flexMain box">
+			<div id="main_header">
+				<h2 style="margin-bottom: 0px;">Chat</h2>
+			</div>
+			<div id="chatBox">
+				<div id="messageBox">
+					<ul id="chat_messages" class="box"></ul>
+					<form id="chatForm" action="">
+						<input type="text" id="message" autocomplete="off" placeholder="Type your message here" autofocus>
+						<button class="button">Send</button>
+					</form>
+				</div>
+
+				<div id="roomBox">
+					<div id="usersBox" class="box">
+						<h3 style="margin-bottom: 5px; margin-top: 15px">Users</h3>
+						<ul id="chat_users"></ul>
+					</div>
+					<div id="roomEditBox" class="box">
+						<h3 id="roomHeader">Room: none</h3>
+						<form id="roomForm" action="">
+							<input type="text" id="roomName" autocomplete="off" value="">
+							<button class="button">&rarr;</button>
+						</form>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- OPEN GAMES -->
+		<div class="flexSide box">
+			<div id="side_header">
+				<h2 style="margin-bottom: 0px;">Games</h2>
+			</div>
+			<div id="gameBox">
+				<ul id="gameList" class="box"></ul>
+				<form id="lobbyForm" action="/game_lounge" method="post">
+					<button class="button">Create</button>
+					<button class="button">Join</button>
+				</form>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>
