@@ -12,8 +12,6 @@
 	<link rel="stylesheet" href="css/menu.css">
 	<script type="text/javascript" src="socket.io.js"></script>
 	<script type="text/javascript" src="libs/jquery-2.1.4.min.js"></script>
-	<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> -->
-	<script type="text/javascript" src="libs/angular.min.js"></script>
 	<script type="text/javascript" src="js/chat.js"></script>
 	<% if (userID) { %>
 		<script>
@@ -63,9 +61,7 @@
 			</div>
 			<div id="chatBox">
 				<div id="messageBox">
-					<ul ng-controller="chatMsgCtrl" id="chat_messages" class="box">
-						<li ng-repeat="msg in chat_messages">{{msg.user}}: {{msg.body}}</li>
-					</ul>
+					<ul id="chat_messages" class="box"></ul>
 					<form id="chatForm" action="">
 						<input type="text" id="message" autocomplete="off" placeholder="Type your message here" autofocus>
 						<button class="button">Send</button>
